@@ -5,7 +5,7 @@ describe('loose', () => {
   const up = new Urlsparser('http://simple.org/easy/path');
 
   it('protocol', () => {
-    expect(up.protocol).to.be.empty;
+    expect(up.protocol).to.equal('http');
   });
 
   it('auth', () => {
@@ -13,31 +13,31 @@ describe('loose', () => {
   });
 
   it('origin', () => {
-    expect(up.origin).it.equals('http://simple.org');
+    expect(up.origin).to.equal('http://simple.org');
   });
 
   it('host', () => {
-    expect(up.host).it.equals('simple.org');
+    expect(up.host).to.equal('simple.org');
   });
 
   it('hostname', () => {
-    expect(up.hostname).it.equals('simple.org');
+    expect(up.hostname).to.equal('simple.org');
   });
 
   it('port', () => {
-    expect(up.port).to.be.empty;
+    expect(up.port).to.be.undefined;
   });
 
   it('path', () => {
-    expect(up.path).it.equals('/easy/path');
+    expect(up.path).to.equal('/easy/path');
   });
 
   it('pathname', () => {
-    expect(up.pathname).it.equals('/easy/path');
+    expect(up.pathname).to.equal('/easy/path');
   });
 
   it('search', () => {
-    expect(up.search).to.be.empty;
+    expect(up.search).to.equal('?');
   });
 
   it('query', () => {
@@ -52,7 +52,7 @@ describe('loose', () => {
     up.queryAdd({ qa: 'added' });
 
     it('query add', () => {
-      expect(up.query).it.equals({ qa: 'added' });
+      expect(up.query).to.deep.equal({ qa: 'added' });
     });
   });
 
@@ -60,14 +60,14 @@ describe('loose', () => {
     up.hashAdd({ ha: 'added' });
 
     it('hash add', () => {
-      expect(up.hash).it.equals({ ha: 'added' });
+      expect(up.hash).to.deep.equal({ ha: 'added' });
     });
   });
 
   describe('build', () => {
 
     it('built url', () => {
-      expect(up.build()).it.equals('http://simple.org/easy/path?qa=added#ha=added');
+      expect(up.build()).to.equal('http://simple.org/easy/path?qa=added#ha=added');
     });
   });
 

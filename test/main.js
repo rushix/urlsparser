@@ -5,60 +5,60 @@ describe('main', () => {
   const up = new Urlsparser('https://login:passwd@sub.domain.xyz:53366/very/long/path/?q1=val1&q2=v2#h1=hv&h2=hv2');
 
   it('protocol', () => {
-    expect(up.protocol).it.equals('https');
+    expect(up.protocol).to.equal('https');
   });
 
   it('auth', () => {
-    expect(up.auth).it.equals({ login: 'login', password: 'passwd' });
+    expect(up.auth).to.deep.equal({ login: 'login', password: 'passwd' });
   });
 
   it('origin', () => {
-    expect(up.origin).it.equals('https://sub.domain.xyz:53366');
+    expect(up.origin).to.equal('https://sub.domain.xyz:53366');
   });
 
   it('host', () => {
-    expect(up.host).it.equals('sub.domain.xyz:53366');
+    expect(up.host).to.equal('sub.domain.xyz:53366');
   });
 
   it('hostname', () => {
-    expect(up.hostname).it.equals('sub.domain.xyz');
+    expect(up.hostname).to.equal('sub.domain.xyz');
   });
 
   it('port', () => {
-    expect(up.port).it.equals('53366');
+    expect(up.port).to.equal('53366');
   });
 
   it('path', () => {
-    expect(up.path).it.equals('/very/long/path/?q1=val1&q2=v2');
+    expect(up.path).to.equal('/very/long/path/?q1=val1&q2=v2');
   });
 
   it('pathname', () => {
-    expect(up.pathname).it.equals('/very/long/path/');
+    expect(up.pathname).to.equal('/very/long/path/');
   });
 
   it('search', () => {
-    expect(up.search).it.equals('?q1=val1&q2=v2');
+    expect(up.search).to.equal('?q1=val1&q2=v2');
   });
 
   it('query', () => {
-    expect(up.query).it.equals({ q1: 'val1', q2: 'v2' });
+    expect(up.query).to.deep.equal({ q1: 'val1', q2: 'v2' });
   });
 
   it('hash', () => {
-    expect(up.hash).it.equals({ h1: 'hv', h2: 'hv2' });
+    expect(up.hash).to.deep.equal({ h1: 'hv', h2: 'hv2' });
   });
 
   describe('mutable query', () => {
     up.queryAdd({ qa: 'added' });
 
     it('query add', () => {
-      expect(up.query).it.equals({ q1: 'val1', q2: 'v2', qa: 'added' });
+      expect(up.query).to.deep.equal({ q1: 'val1', q2: 'v2', qa: 'added' });
     });
 
     up.querySet({ qn: 'brandnew' });
 
     it('query set', () => {
-      expect(up.query).it.equals({ qn: 'brandnew' });
+      expect(up.query).to.deep.equal({ qn: 'brandnew' });
     });
 
     up.queryRemove();
@@ -72,13 +72,13 @@ describe('main', () => {
     up.hashAdd({ ha: 'added' });
 
     it('hash add', () => {
-      expect(up.hash).it.equals({ h1: 'hv', h2: 'hv2', ha: 'added' });
+      expect(up.hash).to.deep.equal({ h1: 'hv', h2: 'hv2', ha: 'added' });
     });
 
     up.hashSet({ hn: 'brandnew' });
 
     it('hash set', () => {
-      expect(up.hash).it.equals({ hn: 'brandnew' });
+      expect(up.hash).to.deep.equal({ hn: 'brandnew' });
     });
 
     up.hashRemove();
@@ -93,7 +93,7 @@ describe('main', () => {
     up.hashSet({ hb1: 'b1', hb2: 'b2' });
 
     it('built url', () => {
-      expect(up.build()).it.equals('https://login:passwd@sub.domain.xyz:53366/very/long/path/?qb1=b1&qb2=b2#hb1=b1&hb2=b2');
+      expect(up.build()).to.equal('https://login:passwd@sub.domain.xyz:53366/very/long/path/?qb1=b1&qb2=b2#hb1=b1&hb2=b2');
     });
   });
 
