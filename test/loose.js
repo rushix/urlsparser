@@ -2,7 +2,10 @@ import { expect } from 'chai';
 import Urlsparser from '../src/app.js';
 
 describe('loose', () => {
-  const up = new Urlsparser('http://simple.org/easy/path');
+  let up;
+  beforeEach(() => {
+    up = new Urlsparser('http://simple.org/easy/path');
+  });
 
   it('protocol', () => {
     expect(up.protocol).to.equal('http');
@@ -49,17 +52,15 @@ describe('loose', () => {
   });
 
   describe('mutable query', () => {
-    up.queryAdd({ qa: 'added' });
-
     it('query add', () => {
+      up.queryAdd({ qa: 'added' });
       expect(up.query).to.deep.equal({ qa: 'added' });
     });
   });
 
   describe('mutable hash', () => {
-    up.hashAdd({ ha: 'added' });
-
     it('hash add', () => {
+      up.hashAdd({ ha: 'added' });
       expect(up.hash).to.deep.equal({ ha: 'added' });
     });
   });
@@ -67,6 +68,8 @@ describe('loose', () => {
   describe('build', () => {
 
     it('built url', () => {
+      up.queryAdd({ qa: 'added' });
+      up.hashAdd({ ha: 'added' });
       expect(up.build()).to.equal('http://simple.org/easy/path?qa=added#ha=added');
     });
   });

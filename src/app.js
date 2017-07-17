@@ -7,21 +7,29 @@ const parseRaw = raw => {
   }, {});
 }
 
+const composeParams = (prefix, params) => {
+  const pairs = Object.entries(params).reduce((acc, [key, value]) => {
+    acc.push(`${ key }=${ value }`);
+
+    return acc;
+  }, []);
+
+  return pairs.length ? `${ prefix }${ pairs.join('&') }` : '';
+}
+
 export default class {
   constructor(url) {
     const pattern = /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/g;
     const matches = pattern.exec(url);
-    
     const [href, protocol, , auth, login, password, hostname, port, path, pathname, , , rawQuery, rawHash] = matches;
-    console.log(href, protocol, auth, login, password, hostname, port, path, pathname, rawQuery, rawHash);
-    console.log(matches);
 
     if (!hostname) {
-      throw(new Error('hostname is expected'));
+      throw new Error('hostname is expected');
     }
 
     this.href = href;
     this.protocol = protocol;
+    this.rawAuth = auth;
     this.auth = auth ? { login, password } : {};
     this.hostname = hostname;
     this.port = port;
@@ -35,11 +43,50 @@ export default class {
     this.hash = !rawHash ? {} : parseRaw(rawHash);
   }
 
-  queryAdd() {}
-  querySet() {}
-  queryRemove() {}
-  hashAdd() {}
-  hashSet() {}
-  hashRemove() {}
-  build() {}
+  queryAdd(additionalQueries) {
+    this.query = Object.assign(this.query, additionalQueries);
+  }
+
+  querySet(queries) {
+    this.query = queries;
+  }
+
+  queryRemove() {
+    this.query = {};
+  }
+
+  hashAdd(additionalHashes) {
+    this.hash = Object.assign(this.hash, additionalHashes);
+  }
+
+  hashSet(hashes) {
+    this.hash = hashes;
+  }
+
+  hashRemove() {
+    this.hash = {};
+  }
+
+  build() {
+    let url = '';
+
+    if (this.protocol) {
+      url = `${ this.protocol }${ url }:\/\/`;
+    }
+
+    if (this.rawAuth) {
+      url = `${ url }${ this.auth.login }:${ this.auth.password }@`;
+    }
+
+    url = `${ url }${ this.host }`;
+
+    if (this.pathname) {
+      url = `${ url }${ this.pathname }`;
+    }
+
+    url = `${ url }${ composeParams('?', this.query) }`;
+    url = `${ url }${ composeParams('#', this.hash) }`;
+
+    return url;
+  }
 }

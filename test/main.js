@@ -2,7 +2,10 @@ import { expect } from 'chai';
 import Urlsparser from '../src/app.js';
 
 describe('main', () => {
-  const up = new Urlsparser('https://login:passwd@sub.domain.xyz:53366/very/long/path/?q1=val1&q2=v2#h1=hv&h2=hv2');
+  let up;
+  beforeEach(() => {
+    up = new Urlsparser('https://login:passwd@sub.domain.xyz:53366/very/long/path/?q1=val1&q2=v2#h1=hv&h2=hv2');
+  });
 
   it('protocol', () => {
     expect(up.protocol).to.equal('https');
@@ -49,50 +52,44 @@ describe('main', () => {
   });
 
   describe('mutable query', () => {
-    up.queryAdd({ qa: 'added' });
-
     it('query add', () => {
+      up.queryAdd({ qa: 'added' });
       expect(up.query).to.deep.equal({ q1: 'val1', q2: 'v2', qa: 'added' });
     });
 
-    up.querySet({ qn: 'brandnew' });
-
     it('query set', () => {
+      up.querySet({ qn: 'brandnew' });
       expect(up.query).to.deep.equal({ qn: 'brandnew' });
     });
 
-    up.queryRemove();
-
     it('query remove', () => {
+      up.queryRemove();
       expect(up.query).to.be.an('object').that.is.empty;
     });
   });
 
   describe('mutable hash', () => {
-    up.hashAdd({ ha: 'added' });
-
     it('hash add', () => {
+      up.hashAdd({ ha: 'added' });
       expect(up.hash).to.deep.equal({ h1: 'hv', h2: 'hv2', ha: 'added' });
     });
 
-    up.hashSet({ hn: 'brandnew' });
-
     it('hash set', () => {
+      up.hashSet({ hn: 'brandnew' });
       expect(up.hash).to.deep.equal({ hn: 'brandnew' });
     });
 
-    up.hashRemove();
-
     it('hash remove', () => {
+      up.hashRemove();
       expect(up.hash).to.be.an('object').that.is.empty;
     });
   });
 
   describe('build', () => {
-    up.querySet({ qb1: 'b1', qb2: 'b2' });
-    up.hashSet({ hb1: 'b1', hb2: 'b2' });
-
     it('built url', () => {
+      up.querySet({ qb1: 'b1', qb2: 'b2' });
+      up.hashSet({ hb1: 'b1', hb2: 'b2' });
+
       expect(up.build()).to.equal('https://login:passwd@sub.domain.xyz:53366/very/long/path/?qb1=b1&qb2=b2#hb1=b1&hb2=b2');
     });
   });
